@@ -1,0 +1,20 @@
+extends layout
+
+block content
+	.container#main
+		.row.from-select
+			h2 Language to Translate FROM
+			select.form-control.col-md-9#selectFrom
+				option.lang-from(data-lang='eng') English
+				option.lang-from(data-lang='fra') French
+		.row
+			form#word-form(role='form')
+				.form-group	
+					input.form-control.col-md-9#word(name="word", type="text", placeholder="Word to Translate")
+					button.btn.btn-primary#submit-btn(type='submit') Submit
+		.row.to-select
+			h2 Language to Translate TO
+			select.form-control.col-md-9#selectTo
+				option.lang-to(data-lang='fra') French
+				option.lang-to(data-lang='eng') English
+		.row#trans-word

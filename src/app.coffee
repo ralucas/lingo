@@ -27,6 +27,8 @@ app.use express.static(path.join(__dirname, './../public'))
 
 newWord = {}
 
+quizResults = []
+
 #development only
 if 'development' == app.get('env')
 	app.use express.errorHandler()
@@ -53,12 +55,29 @@ app.post '/translate', (req, res) ->
 app.get '/quiz', (req, res) ->
 	res.render 'quiz'
 
-beglobal.languages.all( (err, results) -> 
-	if err
-		return console.log err
-	else
-		#console.log results
-		)
+app.get '/lang', (req, res) ->
+	beglobal.languages.all( (err, results) -> 
+		if err
+			return console.log err
+		else
+			res.send results
+			)
+
+app.post '/displayQuiz', (req, res) ->
+	quizWords = req.body
+
+	for quizWord in quizWords['objArr']
+		console.log(quizWord)
+		beglobal.translations.translate(
+			quizWord,
+			(err, results) ->
+				if err then console.log err else
+					quizResults.push(results)
+					console.log quizResults
+					return
+			)
+	res.send {newObj : quizResults}
+	return
 
 http.createServer(app).listen(app.get('port'), () ->
 	console.log 'Express server listening on port ' + app.get('port'))

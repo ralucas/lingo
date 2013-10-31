@@ -1,6 +1,7 @@
 extends layout
+
+block content	
 	h1 Which language would you like to study
 		from(role='form')
 			select.form-control.col-md-9#selectQuiz
 				option.lang-quiz(data-lang='eng') English
-				option.lang-quiz(data-lang='fra') French

@@ -1,3 +1,35 @@
+words = [
+	'hello',
+	'goodbye'
+	'watch'
+	'phone'
+	'computer'
+	'taxi'
+	'hotel'
+	'country'
+	'help'
+	'lost'
+	'cost'
+	'alone'
+]
+
+selectedQuiz = String
+
+quizWords = {}
+
+quizzo = []
+
+createWordsObj = (arr) ->
+	quizzo.length = 0
+	for i in arr
+		quizWords = {
+			"text" : i,
+			"from" : "eng",
+			"to" : selectedQuiz
+		}
+		quizzo.push(quizWords)
+	return quizzo
+
 $ () ->
 
 	$('#word-form').on 'submit', (event) ->
@@ -21,4 +53,21 @@ $ () ->
 
 			return
 		return
+
+	$.get '/lang', (results) ->
+		for i in results
+			if i['to']['code'] isnt 'eng' then $('#selectQuiz')
+			.append('<option data-lang='+i['to']['code']+'>'+
+				i['to']['fullName']+'</option>')
+		return
+
+	$('#selectQuiz').on 'change', () ->
+		selectedQuiz = $('#selectQuiz option:selected').attr('data-lang')
+		quizArr = createWordsObj(words)
+		console.log(quizArr)
+		$.post '/displayQuiz',{ objArr : quizArr } , (data) ->
+			console.log data
+			return
+		return
+
 	return

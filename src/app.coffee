@@ -6,6 +6,7 @@ user = require './../routes/user'
 http = require 'http'
 path = require 'path'
 BeGlobal = require 'node-beglobal'
+async = require 'async'
 
 app = express()
 
@@ -65,19 +66,19 @@ app.get '/lang', (req, res) ->
 
 app.post '/displayQuiz', (req, res) ->
 	quizWords = req.body
-
+	tasks = []
+	quizResults.length = 0
 	for quizWord in quizWords['objArr']
 		console.log(quizWord)
-		beglobal.translations.translate(
-			quizWord,
-			(err, results) ->
-				if err then console.log err else
-					quizResults.push(results)
-					console.log quizResults
-					return
-			)
-	res.send {newObj : quizResults}
-	return
+		do (quizWord) -> 
+			tasks.push (cb) ->
+				beglobal.translations.translate quizWord, (err, results) ->
+					if err then console.log err else
+						quizResults.push(results)
+						cb()
+			
+	async.series tasks, () ->
+		res.send quizResults
 
 http.createServer(app).listen(app.get('port'), () ->
 	console.log 'Express server listening on port ' + app.get('port'))

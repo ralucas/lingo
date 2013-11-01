@@ -6,3 +6,21 @@ body {
 a {
   color: #00B7FF;
 }
+
+ul {
+	list-style: none;
+}
+
+li {
+	text-align: left;
+}
+
+.response {
+	text-align: right;
+}
+
+input {
+	float : none;
+	margin-left: 1%
+	margin-right: 1%;
+}
